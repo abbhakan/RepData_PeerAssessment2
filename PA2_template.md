@@ -1,167 +1,122 @@
-# Reproducible Research: Peer Assessment 1
+# Reproducible Research: Peer Assessment 2
 
 
 ## Loading and preprocessing the data
-Load the activity.zip file into workspace.
+Load the repdata-data-StormData.csv.bz2 file into workspace.
 
 ```r
-unzip("./Activity.zip")
+library("R.utils")
+```
+
+```
+## Warning: package 'R.utils' was built under R version 3.1.2
+```
+
+```
+## Loading required package: R.oo
+```
+
+```
+## Warning: package 'R.oo' was built under R version 3.1.2
+```
+
+```
+## Loading required package: R.methodsS3
+```
+
+```
+## Warning: package 'R.methodsS3' was built under R version 3.1.2
+```
+
+```
+## R.methodsS3 v1.6.1 (2014-01-04) successfully loaded. See ?R.methodsS3 for help.
+## R.oo v1.18.0 (2014-02-22) successfully loaded. See ?R.oo for help.
+## 
+## Attaching package: 'R.oo'
+## 
+## The following objects are masked from 'package:methods':
+## 
+##     getClasses, getMethods
+## 
+## The following objects are masked from 'package:base':
+## 
+##     attach, detach, gc, load, save
+## 
+## R.utils v1.34.0 (2014-10-07) successfully loaded. See ?R.utils for help.
+## 
+## Attaching package: 'R.utils'
+## 
+## The following object is masked from 'package:utils':
+## 
+##     timestamp
+## 
+## The following objects are masked from 'package:base':
+## 
+##     cat, commandArgs, getOption, inherits, isOpen, parse, warnings
+```
+
+```r
+if (!file.exists("./repdata-data-StormData.csv")) {
+        bunzip2("./repdata-data-StormData.csv.bz2")
+}
 ```
         
-# Read feature names and activity labels
-Read the activity.csv into data.
+# Read data
+Read the repdata-data-Stormdata.csv into data frame.
 
 ```r
-data <- read.csv("activity.csv")
+data <- read.table("./repdata-data-StormData.csv", header = TRUE, sep = ",", na.strings = "", comment.char = "#")
+cnames <-readLines("./repdata-data-StormData.csv", 1)
+cnames <- strsplit(cnames, ",", fixed = TRUE)
+cnames <- make.names(cnames[[1]])
+cnames<-gsub("(.*)\\.", "\\1", cnames)
+cnames<-gsub("_", "", cnames)
+names(data) <- cnames
 ```
-
-
-## What is mean total number of steps taken per day?
-Let's omit na from the data. Then we group the data per date and take the sum of steps per day. We plot into a histogram and finally take the mean and median of the aggregated data.
+## Which types of events are most harmful with respect to population health?
+Convert to data table and summarise injuries and fatalities then group by event type. Order by sum and display the top five items.
 
 ```r
-x <- na.omit(data)
-aggregate <- aggregate(steps ~ date, data = x, sum)
-hist(aggregate$steps, breaks = 20, col = "red", xlab = "Mean number of steps per day", main = "Mean number of steps per day")
+library("data.table")
+dt <- data.table(data)
+res <- dt[, list(sum=sum(X.FATALITIES, X.INJURIES)), by = X.EVTYPE]
+res <- res[rev(order(res$sum))]
+head(res)
 ```
 
-![](./PA2_template_files/figure-html/unnamed-chunk-3-1.png) 
+```
+##          X.EVTYPE   sum
+## 1:        TORNADO 96979
+## 2: EXCESSIVE HEAT  8428
+## 3:      TSTM WIND  7461
+## 4:          FLOOD  7259
+## 5:      LIGHTNING  6046
+## 6:           HEAT  3037
+```
+We can see that Tornado is causing the highest total sum of fatalities and injuries.
+
+## Which types of events have the greatest economic consequences?
+Convert to data table and summarise injuries and fatalities then group by event type. Order by sum and display the top five items.
 
 ```r
-mean(aggregate$steps)
+library("data.table")
+dt <- data.table(data)
+res <- dt[, list(sum=sum(X.FATALITIES, X.INJURIES)), by = X.EVTYPE]
+res[rev(order(res$sum))]
 ```
 
 ```
-## [1] 10766.19
+##                          X.EVTYPE   sum
+##   1:                      TORNADO 96979
+##   2:               EXCESSIVE HEAT  8428
+##   3:                    TSTM WIND  7461
+##   4:                        FLOOD  7259
+##   5:                    LIGHTNING  6046
+##  ---                                   
+## 981:                     LIGHTING     0
+## 982: THUNDERSTORM WINDS LIGHTNING     0
+## 983:                   TORNADO F0     0
+## 984:            THUNDERSTORM WINS     0
+## 985:                     SNOW/ICE     0
 ```
-
-```r
-median(aggregate$steps)
-```
-
-```
-## [1] 10765
-```
-The mean is 10766.19 and the median is 10765.
-
-
-## What is the average daily activity pattern?
-Let's get all complete cases from the original data. Then we group the data per interval and take the mean for each interval. Finally we make a plot of average number of steps per interval.
-
-```r
-completeCases <- data[complete.cases(data),]
-completeAggregate <- aggregate(steps ~ interval, data = completeCases, mean)
-plot(completeAggregate$interval, completeAggregate$steps, type = "l", col = "Black", main = "Average number of steps per 5 minute interval", xlab = "5 minute interval", ylab = "Average number of steps")    
-```
-
-![](./PA2_template_files/figure-html/unnamed-chunk-4-1.png) 
-
-#### Get index of max
-We find the index of the max value for number of steps.
-
-```r
-index <- which.max(completeAggregate$steps)
-index
-```
-
-```
-## [1] 104
-```
-
-#### Get interval for max
-We use the index to get the interval that corresponds to the max value.
-
-```r
-maxinterval <- completeAggregate$interval[index]
-maxinterval
-```
-
-```
-## [1] 835
-```
-The interval with the max value of average number of steps is interval 835.
-
-#### Imputing missing values
-We get the total number of na's in the data.
-
-```r
-na <- sum(is.na(data))
-na
-```
-
-```
-## [1] 2304
-```
-There are 2304 NA in the data set.
-
-Let's impute the missing data with the mean for that interval.
-First we define a function to replace the missing data with the mean.
-Then we use plyr to create a new data frame with the imputed data.
-We need to reorder the new data frame due the way plyr orders by group.
-Finally we plot the data in a histogram and compute the mean and median.
-
-```r
-library(plyr)
-impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
-imputeData <- ddply(data, ~interval, transform, steps = impute.mean(steps))
-imputeData <- imputeData[with(imputeData, order(date, interval)), ] #plyr orders by group so we have to reorder
-
-imputeAggregate <- aggregate(steps ~ date, data = imputeData, sum)
-hist(imputeAggregate$steps, breaks = 20, col = "red", xlab = "Mean number of steps per day", main = "Mean number of steps per day")
-```
-
-![](./PA2_template_files/figure-html/unnamed-chunk-8-1.png) 
-
-```r
-mean(imputeAggregate$steps)
-```
-
-```
-## [1] 10766.19
-```
-
-```r
-median(imputeAggregate$steps)
-```
-
-```
-## [1] 10766.19
-```
-The mean is 10766.19 and the median is 10766.19 for the imputed data.
-We can see that there is no difference in the mean or median as compared to the original data when using impute by mean value.
-
-## Are there differences in activity patterns between weekdays and weekends?
-
-Let's create a factor variable indicating whether a date is weekend or weekday and add to the imputed dataset.
-
-```r
-Sys.setlocale("LC_TIME", "English")
-```
-
-```
-## [1] "English_United States.1252"
-```
-
-```r
-imputeData$weekday <- weekdays(strptime(imputeData$date, format = "%Y-%m-%d"))
-weekend <- imputeData$weekday == "Saturday" | imputeData$weekday == "Sunday"
-imputeData$weekday[weekend] <- "weekend"
-imputeData$weekday[!weekend] <- "weekday"
-```
-Make a panel plot for average number of steps per 5-minute interval averaged across all weekday/weekend days using lattice.
-
-```r
-require("lattice")
-```
-
-```
-## Loading required package: lattice
-```
-
-```r
-xyplot(steps ~ interval | weekday, data = imputeData, layout=c(1,2), type="l")
-```
-
-![](./PA2_template_files/figure-html/unnamed-chunk-10-1.png) 
-
-From the plot we can see that the activity pattern is highest on the mornings on the weekdays whereas the overall activity pattern is higher during the weekends in the afternoon.
+We can see that Tornados is causing the highest total sum of fatalities and injuries.
