@@ -24,9 +24,16 @@ cnames <- make.names(cnames[[1]])
 cnames<-gsub("(.*)\\.", "\\1", cnames)
 cnames<-gsub("_", "", cnames)
 names(data) <- cnames
-
 ```
-
+## Which types of events are most harmful with respect to population health?
+Convert to data table and summarise injuries and fatalities then group by event type. Order by sum and display the top five items.
+```{r}
+library("data.table")
+dt <- data.table(data)
+res <- dt[, list(sum=sum(X.FATALITIES, X.INJURIES)), by = X.EVTYPE]
+res[rev(order(res$sum))]
+```
+We can see that Tornado is causing the highest total sum of fatalities and injuries.
 
 ## What is mean total number of steps taken per day?
 Let's omit na from the data. Then we group the data per date and take the sum of steps per day. We plot into a histogram and finally take the mean and median of the aggregated data.
