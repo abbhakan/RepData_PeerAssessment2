@@ -88,7 +88,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 ## The following objects are masked from 'package:base':
 ## 
 ##     cat, commandArgs, getOption, inherits, isOpen, parse, warnings</code></pre>
-<pre class="r"><code>if (!file.exists(&quot;./repdata-data-StormData.csv&quot;)) {
+<pre class="r"><code>if (!file.exists(&quot;./repdata-data-StormData.csv&quot;)) {        
+        fileURL &lt;- &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&quot;
+        dest &lt;- &quot;./repdata-data-StormData.csv.bz2&quot;
+        download.file(fileURL, dest)
         bunzip2(&quot;./repdata-data-StormData.csv.bz2&quot;)
 }</code></pre>
 </div>

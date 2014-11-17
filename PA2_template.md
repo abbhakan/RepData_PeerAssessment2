@@ -56,7 +56,10 @@ library("R.utils")
 ```
 
 ```r
-if (!file.exists("./repdata-data-StormData.csv")) {
+if (!file.exists("./repdata-data-StormData.csv")) {        
+        fileURL <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+        dest <- "./repdata-data-StormData.csv.bz2"
+        download.file(fileURL, dest)
         bunzip2("./repdata-data-StormData.csv.bz2")
 }
 ```
