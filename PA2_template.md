@@ -1,7 +1,11 @@
-# Reproducible Research: Peer Assessment 2
+# Tornados and flooding represent greatest threat to population health and economic damages
 
+## Synopsis
+By analyzing StormData for the most harmful weather events against population health we have found that tornado is causing the highest sum of fatalities with 5633 fatalities. Tornado is also causing the highest sum of injuries with 91346 injuries. Combined tornado will account for a total sum of fatalities and injuries of 96979 occurences. 
 
-## Loading and preprocessing the data
+For economic consequences flood caused 145 Billion USD in property damages. Drought caused 14 Billion USD damage in crop damages. In total flood caused the highest combined property and crop damage of 150 Billion USD.
+
+## Data Processing
 Load the repdata-data-StormData.csv.bz2 file into workspace.
 
 ```r
@@ -64,7 +68,7 @@ if (!file.exists("./repdata-data-StormData.csv")) {
 }
 ```
         
-## Read data
+### Read data
 Read the repdata-data-Stormdata.csv into data frame.
 
 ```r
@@ -76,7 +80,7 @@ cnames<-gsub("(.*)\\.", "\\1", cnames)
 cnames<-gsub("_", "", cnames)
 names(data) <- cnames
 ```
-## Which types of events are most harmful with respect to population health?
+### Which types of events are most harmful with respect to population health?
 Convert data to data table.
 
 ```r
@@ -152,7 +156,7 @@ dataCombined10 <- dataCombined[1:10]
 ```
 We can see that Tornado is causing the highest total sum of fatalities and injuries with 96979 occurences.
 
-## Which types of events have the greatest economic consequences?
+### Which types of events have the greatest economic consequences?
 Let us load the plyr package.
 
 ```r
@@ -319,7 +323,7 @@ install.packages("gridExtra", repos="http://cran.rstudio.com/")
 ## package 'gridExtra' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\hakan.silfvernagel\AppData\Local\Temp\Rtmp4Aj4Um\downloaded_packages
+## 	C:\Users\hakan.silfvernagel\AppData\Local\Temp\RtmpUV5hXi\downloaded_packages
 ```
 
 ```r
@@ -338,7 +342,7 @@ grid.arrange(plotTop10Health,ncol = 1)
 
 ![](./PA2_template_files/figure-html/unnamed-chunk-20-1.png) 
 
-### Population health
+### Economic costs
 From our analysis we can conclude that flood caused the highest combined damage with 150 Billion USD.
 
 ```r
