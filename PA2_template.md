@@ -245,12 +245,59 @@ Sort our data
 sortedPropDamage <- totalPropDamage[with(totalPropDamage,order(Count,decreasing = TRUE)),]
 sortedCropDamage <- totalCropDamage[with(totalCropDamage,order(Count,decreasing = TRUE)),]
 sortedCombinedDamage <- totalCombinedDamage[with(totalCombinedDamage,order(Count,decreasing = TRUE)),]
+```
+
+Let us have a look at top five for our datasets
+
+```r
 sortedPropDamage10 <- sortedPropDamage[1:10,]
+head(sortedPropDamage10)
+```
+
+```
+##              X.EVTYPE        Count
+## 62              FLOOD 144657709800
+## 179 HURRICANE/TYPHOON  69305840000
+## 332           TORNADO  56937160480
+## 281       STORM SURGE  43323536000
+## 50        FLASH FLOOD  16140811510
+## 103              HAIL  15732266720
+```
+We can see that for prop flood caused 145 Billion USD damage.
+
+
+```r
 sortedCropDamage10 <- sortedCropDamage[1:10,]
+head(sortedCropDamage10)
+```
+
+```
+##       X.EVTYPE       Count
+## 16     DROUGHT 13972566000
+## 34       FLOOD  5661968450
+## 98 RIVER FLOOD  5029459000
+## 85   ICE STORM  5022113500
+## 52        HAIL  3025954450
+## 77   HURRICANE  2741910000
+```
+We can see that for crop drought caused 14 Billion USD damage.
+
+
+```r
 sortedCombinedDamage10 <- sortedCombinedDamage[1:10,]
+head(sortedCombinedDamage10)
+```
+
+```
+##              X.EVTYPE        Count
+## 70              FLOOD 150319678250
+## 194 HURRICANE/TYPHOON  71913712800
+## 352           TORNADO  57352113590
+## 298       STORM SURGE  43323541000
+## 113              HAIL  18758221170
+## 58        FLASH FLOOD  17562128610
 ```
 We can see that for the combined damage (crop + prop) flood caused 150 Billion USD damage.
-For crop damage drought caused 13 Billion USD damage and for prop flood caused 145 Billion USD damage.
 
 ## Results
 
@@ -272,7 +319,7 @@ install.packages("gridExtra", repos="http://cran.rstudio.com/")
 ## package 'gridExtra' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-## 	C:\Users\hakan.silfvernagel\AppData\Local\Temp\RtmpoTW2Yd\downloaded_packages
+## 	C:\Users\hakan.silfvernagel\AppData\Local\Temp\Rtmp4Aj4Um\downloaded_packages
 ```
 
 ```r
@@ -289,7 +336,7 @@ plotTop10Health <- plotTop10Health+geom_bar(stat="identity") + theme(axis.text.x
 grid.arrange(plotTop10Health,ncol = 1)
 ```
 
-![](./PA2_template_files/figure-html/unnamed-chunk-17-1.png) 
+![](./PA2_template_files/figure-html/unnamed-chunk-20-1.png) 
 
 ### Population health
 From our analysis we can conclude that flood caused the highest combined damage with 150 Billion USD.
@@ -300,4 +347,4 @@ plotTop10Damage <- plotTop10Damage+geom_bar(stat="identity") + theme(axis.text.x
 grid.arrange(plotTop10Damage,ncol = 1)
 ```
 
-![](./PA2_template_files/figure-html/unnamed-chunk-18-1.png) 
+![](./PA2_template_files/figure-html/unnamed-chunk-21-1.png) 

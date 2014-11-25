@@ -124,12 +124,26 @@ Sort our data
 sortedPropDamage <- totalPropDamage[with(totalPropDamage,order(Count,decreasing = TRUE)),]
 sortedCropDamage <- totalCropDamage[with(totalCropDamage,order(Count,decreasing = TRUE)),]
 sortedCombinedDamage <- totalCombinedDamage[with(totalCombinedDamage,order(Count,decreasing = TRUE)),]
+```
+
+Let us have a look at top five for our datasets
+```{r}
 sortedPropDamage10 <- sortedPropDamage[1:10,]
+head(sortedPropDamage10)
+```
+We can see that for prop flood caused 145 Billion USD damage.
+
+```{r}
 sortedCropDamage10 <- sortedCropDamage[1:10,]
+head(sortedCropDamage10)
+```
+We can see that for crop drought caused 14 Billion USD damage.
+
+```{r}
 sortedCombinedDamage10 <- sortedCombinedDamage[1:10,]
+head(sortedCombinedDamage10)
 ```
 We can see that for the combined damage (crop + prop) flood caused 150 Billion USD damage.
-For crop damage drought caused 13 Billion USD damage and for prop flood caused 145 Billion USD damage.
 
 ## Results
 

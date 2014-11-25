@@ -200,11 +200,38 @@ colnames(totalCombinedDamage)[2] &lt;- &quot;Count&quot;</code></pre>
 <p>Sort our data</p>
 <pre class="r"><code>sortedPropDamage &lt;- totalPropDamage[with(totalPropDamage,order(Count,decreasing = TRUE)),]
 sortedCropDamage &lt;- totalCropDamage[with(totalCropDamage,order(Count,decreasing = TRUE)),]
-sortedCombinedDamage &lt;- totalCombinedDamage[with(totalCombinedDamage,order(Count,decreasing = TRUE)),]
-sortedPropDamage10 &lt;- sortedPropDamage[1:10,]
-sortedCropDamage10 &lt;- sortedCropDamage[1:10,]
-sortedCombinedDamage10 &lt;- sortedCombinedDamage[1:10,]</code></pre>
-<p>We can see that for the combined damage (crop + prop) flood caused 150 Billion USD damage. For crop damage drought caused 13 Billion USD damage and for prop flood caused 145 Billion USD damage.</p>
+sortedCombinedDamage &lt;- totalCombinedDamage[with(totalCombinedDamage,order(Count,decreasing = TRUE)),]</code></pre>
+<p>Let us have a look at top five for our datasets</p>
+<pre class="r"><code>sortedPropDamage10 &lt;- sortedPropDamage[1:10,]
+head(sortedPropDamage10)</code></pre>
+<pre><code>##              X.EVTYPE        Count
+## 62              FLOOD 144657709800
+## 179 HURRICANE/TYPHOON  69305840000
+## 332           TORNADO  56937160480
+## 281       STORM SURGE  43323536000
+## 50        FLASH FLOOD  16140811510
+## 103              HAIL  15732266720</code></pre>
+<p>We can see that for prop flood caused 145 Billion USD damage.</p>
+<pre class="r"><code>sortedCropDamage10 &lt;- sortedCropDamage[1:10,]
+head(sortedCropDamage10)</code></pre>
+<pre><code>##       X.EVTYPE       Count
+## 16     DROUGHT 13972566000
+## 34       FLOOD  5661968450
+## 98 RIVER FLOOD  5029459000
+## 85   ICE STORM  5022113500
+## 52        HAIL  3025954450
+## 77   HURRICANE  2741910000</code></pre>
+<p>We can see that for crop drought caused 14 Billion USD damage.</p>
+<pre class="r"><code>sortedCombinedDamage10 &lt;- sortedCombinedDamage[1:10,]
+head(sortedCombinedDamage10)</code></pre>
+<pre><code>##              X.EVTYPE        Count
+## 70              FLOOD 150319678250
+## 194 HURRICANE/TYPHOON  71913712800
+## 352           TORNADO  57352113590
+## 298       STORM SURGE  43323541000
+## 113              HAIL  18758221170
+## 58        FLASH FLOOD  17562128610</code></pre>
+<p>We can see that for the combined damage (crop + prop) flood caused 150 Billion USD damage.</p>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
@@ -219,7 +246,7 @@ install.packages(&quot;gridExtra&quot;, repos=&quot;http://cran.rstudio.com/&quo
 <pre><code>## package 'gridExtra' successfully unpacked and MD5 sums checked
 ## 
 ## The downloaded binary packages are in
-##  C:\Users\hakan.silfvernagel\AppData\Local\Temp\RtmpoTW2Yd\downloaded_packages</code></pre>
+##  C:\Users\hakan.silfvernagel\AppData\Local\Temp\Rtmp4Aj4Um\downloaded_packages</code></pre>
 <pre class="r"><code>library(gridExtra)</code></pre>
 <pre><code>## Warning: package 'gridExtra' was built under R version 3.1.2</code></pre>
 <pre class="r"><code>plotTop10Health &lt;- ggplot(dataCombined10,aes(x= X.EVTYPE,y = sum))
